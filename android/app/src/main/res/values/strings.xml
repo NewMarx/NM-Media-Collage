@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">NewMarx Media</string>
+    <string name="title_activity_main">NewMarx Media</string>
+    <string name="package_name">com.newmarxmedia.college</string>
+    <string name="custom_url_scheme">com.newmarxmedia.college</string>
+</resources>

@@ -1,0 +1,53 @@
+{
+  "expo": {
+    "name": "NewMarx Media",
+    "slug": "nm-media-college",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "description": "A sophisticated College Management System for NewMarx Media College, featuring administrative controls, student portals, and integrated AI assistance.",
+    "userInterfaceStyle": "light",
+    "splash": {
+      "image": "./assets/NM Media Collage logo.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#0f172a"
+    },
+    "assetBundlePatterns": [
+      "**/*"
+    ],
+    "ios": {
+      "supportsTabletMode": true,
+      "bundleIdentifier": "com.newmarxmedia.college"
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/NM Media Collage logo.png",
+        "backgroundColor": "#ffffff"
+      },
+      "permissions": [
+        "INTERNET",
+        "CAMERA",
+        "READ_EXTERNAL_STORAGE",
+        "WRITE_EXTERNAL_STORAGE"
+      ],
+      "package": "com.newmarxmedia.college",
+      "versionCode": 1,
+      "usesCleartextTraffic": true
+    },
+    "web": {
+      "favicon": "./assets/NM Media Collage logo.png"
+    },
+    "plugins": [
+      [
+        "expo-document-picker",
+        {
+          "iCloudContainerEnvironment": "Production"
+        }
+      ]
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "nm-media-college"
+      }
+    }
+  }
+}
