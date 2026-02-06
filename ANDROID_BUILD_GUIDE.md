@@ -1,114 +1,128 @@
 # Android APK Build Guide for NewMarx Media
 
-## Quick Start (Using Expo EAS Build - Cloud-Based, No Local Setup Required)
+## Fixed Configuration
 
-### Option 1: Expo EAS Build (Recommended - Cloud-Based)
-
-This requires an Expo account (free tier available).
-
-```powershell
-# Install EAS CLI globally
-npm install -g eas-cli
-
-# Login to your Expo account (creates account if you don't have one)
-eas login
-
-# Build APK for Android (cloud build)
-eas build --platform android --output="./NM-Media.apk"
-
-# Wait for build to complete, then download APK
-```
-
-The APK will be downloaded automatically and ready to install on Android devices.
+✅ **app.json** - Cleaned up, removed problematic plugins
+✅ **eas.json** - Fixed APK build configuration  
+✅ **capacitor.config.ts** - Proper web-dir configuration
+✅ **Android Project** - Generated via Capacitor
 
 ---
 
-## Option 2: Local Build (Requires Android Studio & SDK Setup)
-
-If you want to build locally on your machine:
+## Option 1: Using Android Studio (Recommended - GUI, Most Reliable)
 
 ### Prerequisites:
-1. **Android Studio** - Download from https://developer.android.com/studio
-2. **Java Development Kit (JDK)** - Latest LTS version
-3. **Android SDK** - Installed via Android Stu distio
-4. **ANDROID_SDK_ROOT** environment variable - Set to SDK location
+1. Download **Android Studio** from https://developer.android.com/studio
+2. During installation, select "Android SDK", "Android SDK Platform", and "Android Virtual Device"
+3. Install latest Android SDK (API 34 recommended)
 
 ### Build Steps:
 
 ```powershell
-# Install Capacitor CLI and Android platform
-npm install -g @capacitor/cli
-npx cap add android
+# 1. Build the web app
+npm run build
 
-# Sync web build to Android project
-npx cap sync android
+# 2. Sync to Android project
+npm run cap:sync
 
-# Open Android Studio project
-npx cap open android
-# Or manually open: android/ folder in Android Studio
-
-# In Android Studio:
-# 1. Wait for Gradle sync to complete
-# 2. Click "Build" > "Build Bundle(s) / APK(s)" > "Build APK(s)"
-# 3. Wait for build to complete
-# 4. APK will be in: android/app/release/app-release.apk
+# 3. Open in Android Studio
+npm run cap:open
+# (Or manually open the 'android' folder)
 ```
+
+**In Android Studio:**
+1. Wait for Gradle sync to complete (bottom right indicator shows "Sync successful")
+2. Click menu: **Build** → **Build Bundle(s) / APK(s)** → **Build APK(s)**
+3. Wait for build to complete (watch the build console at bottom)
+4. Click "Locate" in the success notification
+5. APK file will be in: `android/app/release/app-release.apk`
+
+✅ **Result:** Ready-to-install APK file
 
 ---
 
-## Option 3: Using Gradle Directly (If Android SDK is Installed)
+## Option 2: Command Line with Android SDK (If Already Installed)
 
 ```powershell
-# After `npx cap add android` and `npx cap sync android`
+# Ensure ANDROID_SDK_ROOT environment variable is set
+$env:ANDROID_SDK_ROOT = "PATH_TO_YOUR_SDK"  # e.g., "C:\Users\YourName\AppData\Local\Android\Sdk"
+
+# Build
 cd android
-gradlew assembleRelease
-# APK will be at: app/build/outputs/apk/release/app-release.apk
+.\gradlew assembleRelease
+
+# APK output: app/build/outputs/apk/release/app-release.apk
 ```
 
 ---
 
-## Current Project Configuration
+## Option 3: Docker Build (No Local Android Setup Needed)
 
-✅ **Already Configured For Android:**
-- `app.json` - Includes Android package name and icon
-- `capacitor.config.ts` - Capacitor configuration with web-dir pointing to dist/
-- Web build - Already generated in `dist/` folder
-- Package.json - All dependencies installed
+If you have Docker installed:
+
+```bash
+docker run --rm -v <project_path>:/app -w /app node:18
+npm install
+npm run build
+docker run --rm -v <project_path>:/app -w /app/android gradle:8.0
+./gradlew assembleRelease
+```
 
 ---
 
-## Testing on Android Device
-
-Once you have the APK:
+## Option 4: Cloud Build (Requires EAS Account)
 
 ```powershell
-# Install APK on connected Android device via ADB
-adb install NM-Media.apk
+# 1. Create free account at https://expo.dev
+# 2. Login locally
+npm install -g eas-cli
+eas login
 
-# Or transfer APK to device and install manually
+# 3. Build (cloud-based, no local Android SDK needed)
+eas build --platform android --preview
+```
+
+⏱️ Takes 15-30 minutes but requires no local setup.
+
+---
+
+## Testing the APK
+
+```powershell
+# Connect Android device via USB with Developer Mode enabled
+adb install app-release.apk
+
+# Or transfer APK file to device and tap to install
 ```
 
 ---
 
 ## Troubleshooting
 
-**If EAS Build requires authentication:**
-- Create free account at https://expo.dev
-- Run: `eas login` and follow prompts
-- Then retry: `eas build --platform android`
+**Option 1 (Android Studio) Issues:**
+- Ensure Android SDK Platform is installed (Settings → System Settings → Android SDK)
+- Check Java version: `java -version` (should show 11 or higher)
+- Try invalidating cache: File → Invalidate Caches
 
-**If local build fails:**
-- Ensure ANDROID_SDK_ROOT is set correctly
-- Update Android Studio and SDKs to latest version
-- Check Java version: `java -version` (should be 11+)
+**Option 2 (Gradle CLI) Issues:**
+- Verify `ANDROID_SDK_ROOT` environment variable is set: `echo $env:ANDROID_SDK_ROOT`
+- Update SDK platforms: `sdkmanager "platforms;android-34"`
+- Check Java: `java -version`
+
+**Option 4 (EAS) Issues:**
+- Sign up at https://expo.dev
+- Authenticate: `eas login`
+- Check credentials: `eas whoami`
 
 ---
 
-## File Distribution
+## Next Steps
 
-The generated APK can be:
-- Shared via email, cloud storage, or app distribution platforms
-- Uploaded to Google Play Store
-- Distributed via direct download link
+1. **Choose your build method** from the options above
+2. **Follow the steps** for that method
+3. **Get your APK** file
+4. **Test on device** or install via Google Play Store
 
-Size: ~169 MB (typical for React web app wrapped as Android app)
+**File Size:** ~150-170 MB (typical for React web app wrapped as native Android)
+**Min Android Version:** Android 6.0 (API 23)
+

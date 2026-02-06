@@ -36,17 +36,9 @@
     "web": {
       "favicon": "./assets/NM Media Collage logo.png"
     },
-    "plugins": [
-      [
-        "expo-document-picker",
-        {
-          "iCloudContainerEnvironment": "Production"
-        }
-      ]
-    ],
     "extra": {
       "eas": {
-        "projectId": "nm-media-college"
+        "projectId": "12345678-1234-1234-1234-123456789abc"
       }
     }
   }
